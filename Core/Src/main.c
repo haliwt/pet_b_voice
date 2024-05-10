@@ -23,10 +23,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "gpio_init.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bsp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,10 +94,14 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_TIM17_Init();
-  MX_USART2_UART_Init();
+  //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_Delay(1000);
+  SWDIO_GPIO_Init();
 
   /* USER CODE END 2 */
+
+   freeRTOS_Handler();
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -157,6 +162,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
 
 /**
   * @brief  This function is executed in case of error occurrence.

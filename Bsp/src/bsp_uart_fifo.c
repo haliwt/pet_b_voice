@@ -17,7 +17,7 @@
 
 static void UartVarInit(void);
 
-static void InitHardUart(void);
+//static void InitHardUart(void);
 static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen);
 static uint8_t UartGetChar(UART_T *_pUart, uint8_t *_pByte);
 static void UartIRQ(UART_T *_pUart);

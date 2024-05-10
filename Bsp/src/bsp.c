@@ -10,8 +10,8 @@ static void vTaskTaskUserIF(void *pvParameters);
 static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
-//static void AppTaskCreate (void);
-static void COMProcessHelp(void);
+static void AppTaskCreate (void);
+
 
 /*
 **********************************************************************************************************
@@ -23,6 +23,25 @@ static TaskHandle_t xHandleTaskLED = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
+/**********************************************************************************************************
+*	函 数 名:  void freeRTOS_Handler(void)
+*	功能说明: 
+*	形    参: 
+*	返 回 值: 
+*   优 先 级: 
+*********************************************************************************************************/
+ void freeRTOS_Handler(void)
+ {
+
+     	/* ???? */
+	AppTaskCreate();
+	
+    /* ????,?????? */
+    vTaskStartScheduler();
+
+
+
+ }
 
 
 /*
@@ -96,7 +115,7 @@ static void vTaskMsgPro(void *pvParameters)
 	
 
 	/* 打印串口命令操作提示 */
-	COMProcessHelp();
+	
 	
     while(1)
     {
@@ -133,7 +152,7 @@ static void vTaskStart(void *pvParameters)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-void AppTaskCreate (void)
+static void AppTaskCreate (void)
 {
     xTaskCreate( vTaskTaskUserIF,   	/* 任务函数  */
                  "vTaskUserIF",     	/* 任务名    */
@@ -164,24 +183,6 @@ void AppTaskCreate (void)
                  NULL,           		/* 任务参数  */
                  4,              		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskStart );   /* 任务句柄  */
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: COMProcessHelp
-*	功能说明:串口操作提示
-*	形    参：无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-static void COMProcessHelp(void)
-{
-//	printf("==========================================\r\n");
-//	printf("请选择串口操作命令，电脑键盘打印数字即可:\r\n");
-//	printf("1. 接收到命令1，打印消息\r\n");
-//	printf("2. 接收到命令2，打印消息\r\n");
-//	printf("3. 接收到命令3，打印消息\r\n");
-//	printf("4. 接收到命令4，打印消息\r\n");
 }
 
 
