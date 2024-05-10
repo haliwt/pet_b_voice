@@ -7,10 +7,23 @@
 **********************************************************************************************************
 */
 static void vTaskTaskUserIF(void *pvParameters);
-static void vTaskLED(void *pvParameters);
+//static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
+static void AppObjCreate (void);
+
+static QueueSetHandle_t xQueueSet;          /* 定义队列集 */
+QueueHandle_t           xQueue1;            /* 定义队列1 */
+QueueHandle_t           xQueue2;            /* 定义队列2 */
+QueueHandle_t           xQueue3;            /* 定义队列3 */
+
+//SemaphoreHandle_t       xSemaphore;         /* 定义二值信号量 */
+
+#define QUEUE_LENGTH          					  1                   /* 队列支持的消息个数 */
+#define QUEUE_ITEM_SIZE       					  sizeof(uint8_t)    /* 队列中每条消息的大小 */
+#define SEMAPHORE_BINARY_LENGTH 					1                   /* 二值信号量的有效长度 */
+#define QUEUESET_LENGTH       					  ((3 * QUEUE_LENGTH) + SEMAPHORE_BINARY_LENGTH)  /* 队列集支持的消息个数 */
 
 
 /*
@@ -19,9 +32,17 @@ static void AppTaskCreate (void);
 **********************************************************************************************************
 */
 static TaskHandle_t xHandleTaskUserIF = NULL;
-static TaskHandle_t xHandleTaskLED = NULL;
+//static TaskHandle_t xHandleTaskLED = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
+
+//static QueueHandle_t 	xQueue1 = NULL;
+//static QueueHandle_t 	xQueue2 = NULL;
+//static QueueHandle_t 	xQueue3 = NULL;
+
+
+
+
 
 /**********************************************************************************************************
 *	函 数 名:  void freeRTOS_Handler(void)
@@ -33,10 +54,13 @@ static TaskHandle_t xHandleTaskStart = NULL;
  void freeRTOS_Handler(void)
  {
 
-     	/* ???? */
+   	/* 创建任务 */
 	AppTaskCreate();
+
+	/* 创建任务通信机制 */
+	AppObjCreate();
 	
-    /* ????,?????? */
+    /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
 
@@ -56,6 +80,7 @@ static TaskHandle_t xHandleTaskStart = NULL;
 static void vTaskTaskUserIF(void *pvParameters)
 {
 	uint8_t ucKeyCode;
+    uint8_t key_value;
 	//uint8_t pcWriteBuffer[50];
 
     while(1)
@@ -66,6 +91,60 @@ static void vTaskTaskUserIF(void *pvParameters)
 		{
 			switch (ucKeyCode)
 			{
+			    case KEY_1_DOWN : //key_select fun 
+                    key_value = 1;
+				   /* 向消息队列发数据，如果消息队列满了，等待10个时钟节拍 */
+                  //  xQueueSend(xQueue1,&key_value,(TickType_t)10);
+					if( xQueueSend(xQueue1,(void*) &key_value,(TickType_t)10) != pdPASS ){
+						/* 发送失败，即使等待了10个时钟节拍 */
+						//printf("K2键按下，向xQueue1发送数据失败，即使等待了10个时钟节拍\r\n");
+					}
+					else
+					{
+						/* 发送成功 */
+						//printf("K2键按下，向xQueue1发送数据成功\r\n");						
+					}
+
+
+				break;
+
+				case KEY_2_DOWN: //key_confirm fun
+
+                   key_value =4;
+				  /* 使用消息队列实现指针变量的传递 */
+					if(xQueueSend(xQueue2,                  /* 消息队列句柄 */
+								   (void *)&key_value,           /* 发送结构体指针变量ptMsg的地址 */
+								  (TickType_t)10) != pdPASS ){
+								  
+						/* 发送失败，即使等待了10个时钟节拍 */
+						//printf("K3键按下，向xQueue2发送数据失败，即使等待了10个时钟节拍\r\n");
+					}
+					else
+					{
+						/* 发送成功 */
+						//printf("K3键按下，向xQueue2发送数据成功\r\n");						
+					}
+
+				break;
+
+				case KEY_2_LONG: //long key_cofirm fun
+                    key_value =6;
+				  /* 使用消息队列实现指针变量的传递 */
+					if(xQueueSend(xQueue3,                  /* 消息队列句柄 */
+								 (void *) &key_value,           /* 发送结构体指针变量ptMsg的地址 */
+								 (TickType_t)10) != pdPASS )
+					{
+						/* 发送失败，即使等待了10个时钟节拍 */
+						//printf("K3键按下，向xQueue2发送数据失败，即使等待了10个时钟节拍\r\n");
+					}
+					else
+					{
+						/* 发送成功 */
+						//printf("K3键按下，向xQueue2发送数据成功\r\n");						
+					}
+
+
+				break;
 
 			}
 		}
@@ -83,23 +162,34 @@ static void vTaskTaskUserIF(void *pvParameters)
 *   优 先 级: 2  (数值越小优先级越低，这个跟uCOS相反)
 *********************************************************************************************************
 */
-static void vTaskLED(void *pvParameters)
-{
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 200;
-
-	/* 获取当前的系统时间 */
-    xLastWakeTime = xTaskGetTickCount(); //此函数用于获取系统当前运行的时钟节拍数。
-	
-    while(1)
-    {
-       //	bsp_LedToggle(2);
-		//bsp_LedToggle(3);
-		
-		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
-        vTaskDelayUntil(&xLastWakeTime, xFrequency);
-    }
-}
+//static void vTaskLED(void *pvParameters)
+//{
+//	
+//	BaseType_t xResult;
+//	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
+//	
+//    while(1)
+//    {
+////		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
+////		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
+////		                        (TickType_t)xMaxBlockTime);/* 设置阻塞时间 */
+////		
+////		
+////		if(xResult == pdPASS)
+////		{
+////			/* 成功接收，并通过串口将数据打印出来 */
+////			//printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
+////			///printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
+////			//printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
+////		}
+////		else
+////		{
+////			/* 超时 */
+////			bsp_LedToggle(2);
+////			bsp_LedToggle(3);
+////		}
+//    }
+//}
 
 /*
 *********************************************************************************************************
@@ -112,19 +202,47 @@ static void vTaskLED(void *pvParameters)
 */
 static void vTaskMsgPro(void *pvParameters)
 {
-	
 
-	/* 打印串口命令操作提示 */
+	
+    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为300ms */
+    QueueSetMemberHandle_t  activate_member = NULL;
+    uint32_t                queue_recv      = 0;
 	
 	
     while(1)
     {
 
-		
-	vTaskDelay(20);
-  }
+	    activate_member = xQueueSelectFromSet(xQueueSet,  (TickType_t)xMaxBlockTime);/* 等待队列集中的队列接收到消息 */
+        
+        if (activate_member == xQueue1)
+        {
+            xQueueReceive(activate_member, &queue_recv, (TickType_t)xMaxBlockTime);
+			//KEY_SELECT information 
+            //printf("接收到来自xQueue1的消息: %d\r\n", queue_recv);
+        }
+        else if (activate_member == xQueue2)
+        {
+            xQueueReceive(activate_member, &queue_recv, (TickType_t)xMaxBlockTime);
+			//KEY_CONFIR  information
+            //printf("接收到来自xQueue2的消息: %d\r\n", queue_recv);
+        }
+//        else if (activate_member == xSemaphore)
+//        {
+//            xSemaphoreTake(activate_member, (TickType_t)xMaxBlockTime);
+//            printf("获取到二值信号量: xSemaphore\r\n");
+//        }
+		else{
 
+            //Run_Main_Process();
+
+		}
+    }
+
+		
+	//vTaskDelay(20);
 }
+
+
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskStart
@@ -162,18 +280,18 @@ static void AppTaskCreate (void)
                  &xHandleTaskUserIF );  /* 任务句柄  */
 	
 	
-	xTaskCreate( vTaskLED,    		/* 任务函数  */
-                 "vTaskLED",  		/* 任务名    */
-                 128,         		/* stack大小，单位word，也就是4字节 */
-                 NULL,        		/* 任务参数  */
-                 2,           		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
-                 &xHandleTaskLED ); /* 任务句柄  */
+//	xTaskCreate( vTaskLED,    		/* 任务函数  */
+//                 "vTaskLED",  		/* 任务名    */
+//                 128,         		/* stack大小，单位word，也就是4字节 */
+//                 NULL,        		/* 任务参数  */
+//                 2,           		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
+//                 &xHandleTaskLED ); /* 任务句柄  */
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,               		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
+                 2,               		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -181,10 +299,52 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 4,              		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
+                 3,              		/* 任务优先级 数值越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
 
+
+/*
+*********************************************************************************************************
+*	函 数 名: AppObjCreate
+*	功能说明: 创建任务通信机制
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+static void AppObjCreate (void)
+{
+   #if 0
+   /* 创建10个uint8_t型消息队列 */
+	xQueue1 = xQueueCreate(10, sizeof(uint8_t));
+    if( xQueue1 == 0 )
+    {
+        /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
+    }
+	
+	/* 创建10个存储指针变量的消息队列，由于CM3/CM4内核是32位机，一个指针变量占用4个字节 */
+	xQueue2 = xQueueCreate(10, sizeof(struct Msg *));
+    if( xQueue2 == 0 )
+    {
+        /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
+    }
+	#endif 
+
+	/* 创建队列集 */
+    xQueueSet = xQueueCreateSet(QUEUESET_LENGTH);
+    /* 创建队列 */
+    xQueue1 = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
+    xQueue2 = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
+	xQueue3 = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
+    /* 创建二值信号量 */
+   // xSemaphore = xSemaphoreCreateBinary();
+    /* 将队列和二值信号量添加到队列集 */
+    xQueueAddToSet(xQueue1, xQueueSet);
+    xQueueAddToSet(xQueue2, xQueueSet);
+	xQueueAddToSet(xQueue3, xQueueSet);
+	
+    //xQueueAddToSet(xSemaphore, xQueueSet);
+}
 
 

@@ -16,20 +16,20 @@ static void bsp_DetectKey(uint8_t i);
 *	返 回 值: 返回值1 表示按下，0表示未按下
 *********************************************************************************************************
 */
-//static uint8_t IsKeyDown1(void) 
-//{
-//	//if ((M_KEY_UP_GPIO_Port->IDR & M_KEY_UP_Pin) == 0) 
-//		return 1;
-//	else 
-//		return 0;
-//}
-//static uint8_t IsKeyDown2(void)
-//{
-//	//if ((M_KEY_DOWN_GPIO_Port->IDR & M_KEY_DOWN_Pin ) == 0) 
-//		return 1;
-//	else 
-//		return 0;
-//}
+static uint8_t IsKeyDown1(void) 
+{
+	if ((KEY_SELECT_GPIO_Port->IDR & KEY_SELECT_Pin) == 0) 
+		return 1;
+	else 
+		return 0;
+}
+static uint8_t IsKeyDown2(void)
+{
+	if ((KEY_CONFIRM_GPIO_Port->IDR & KEY_CONFIRM_Pin) == 0) 
+		return 1;
+	else 
+		return 0;
+}
 //static uint8_t IsKeyDown3(void) 
 //{
 //	//if ((M_KEY_STOP_GPIO_Port->IDR & M_KEY_STOP_Pin) == 0) 
@@ -190,42 +190,8 @@ void bsp_ClearKey(void)
 static void bsp_InitKeyHard(void)
 {
 
-    #if 0
-	GPIO_InitTypeDef GPIO_InitStructure;
+    
 
-	/* 第1步：打开GPIO时钟 */
-	RCC_AHB1PeriphClockCmd(RCC_ALL_KEY, ENABLE);
-
-	/* 第2步：配置所有的按键GPIO为浮动输入模式(实际上CPU复位后就是输入状态) */
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;		/* 设为输入口 */
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;		/* 设为推挽模式 */
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;	/* 无需上下拉电阻 */
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	/* IO口最大速度 */
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K1;
-	GPIO_Init(GPIO_PORT_K1, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K2;
-	GPIO_Init(GPIO_PORT_K2, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K3;
-	GPIO_Init(GPIO_PORT_K3, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K4;
-	GPIO_Init(GPIO_PORT_K4, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K5;
-	GPIO_Init(GPIO_PORT_K5, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K6;
-	GPIO_Init(GPIO_PORT_K6, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K7;
-	GPIO_Init(GPIO_PORT_K7, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_K8;
-	GPIO_Init(GPIO_PORT_K8, &GPIO_InitStructure);
-	#endif 
 }
 
 /*
@@ -260,8 +226,8 @@ static void bsp_InitKeyVar(void)
 
 
 	/* 判断按键按下的函数 */
-//	s_tBtn[0].IsKeyDownFunc = IsKeyDown1; //初始化函数入口，函数指针
-//	s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
+	s_tBtn[0].IsKeyDownFunc = IsKeyDown1; //初始化函数入口，函数指针
+	s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
 //	s_tBtn[2].IsKeyDownFunc = IsKeyDown3;
 //	s_tBtn[3].IsKeyDownFunc = IsKeyDown4;
 //	s_tBtn[4].IsKeyDownFunc = IsKeyDown5;
@@ -312,7 +278,11 @@ static void bsp_DetectKey(uint8_t i)
 				pBtn->State = 1;
 
 				/* 发送按钮按下的消息 */
-				bsp_PutKey((uint8_t)(3 * i + 1));
+				//s_tBtn[i].KeyCodeDown = 3 * i + 1;				/* 按键按下的键值代码 */
+				//s_tBtn[i].KeyCodeUp   = 3 * i + 2;				/* 按键弹起的键值代码 */
+				//s_tBtn[i].KeyCodeLong = 3 * i + 3;				/* 按键被持续按下的键值代码 */
+				bsp_PutKey((uint8_t)(3 * i + 1));// i=0; key_code=1, i=1,key_code= 4, 短按按键
+				
 			}
 
 			if (pBtn->LongTime > 0)
@@ -323,7 +293,7 @@ static void bsp_DetectKey(uint8_t i)
 					if (++pBtn->LongCount == pBtn->LongTime)
 					{
 						/* 键值放入按键FIFO */
-						bsp_PutKey((uint8_t)(3 * i + 3));
+						bsp_PutKey((uint8_t)(3 * i + 3)); // i=0; key_code=3, i=1,key_code= 6,长按按键
 					}
 				}
 				else
@@ -334,7 +304,7 @@ static void bsp_DetectKey(uint8_t i)
 						{
 							pBtn->RepeatCount = 0;
 							/* 常按键后，每隔10ms发送1个按键 */
-							bsp_PutKey((uint8_t)(3 * i + 1));
+							bsp_PutKey((uint8_t)(3 * i + 1)); 
 						}
 					}
 				}

@@ -5,12 +5,12 @@
 #include <string.h>
 
 
-//#include "cmsis_os.h"
-//#include "adc.h"
-//#include "iwdg.h"
-//#include "tim.h"
-//#include "usart.h"
-//#include "gpio.h"
+#include "adc.h"
+#include "i2c.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
+#include "gpio_init.h"
 
 #include "FreeRTOS.h"
 #include "task.h"

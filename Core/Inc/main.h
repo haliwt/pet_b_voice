@@ -57,30 +57,60 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define RELAY_D_Pin GPIO_PIN_15
-#define RELAY_D_GPIO_Port GPIOC
-#define LED_KEY_CTL_Pin GPIO_PIN_1
-#define LED_KEY_CTL_GPIO_Port GPIOA
-#define RELAY_B_Pin GPIO_PIN_3
-#define RELAY_B_GPIO_Port GPIOA
-#define LED_RELAY_A_Pin GPIO_PIN_4
-#define LED_RELAY_A_GPIO_Port GPIOA
-#define LED_RELAY_B_Pin GPIO_PIN_5
-#define LED_RELAY_B_GPIO_Port GPIOA
-#define LED_RELAY_C_Pin GPIO_PIN_6
-#define LED_RELAY_C_GPIO_Port GPIOA
-#define LED_RELAY_D_Pin GPIO_PIN_7
-#define LED_RELAY_D_GPIO_Port GPIOA
-#define KEY_SELECT_Pin GPIO_PIN_0
-#define KEY_SELECT_GPIO_Port GPIOB
+
+//KEY SELECT GPIO 
+#define KEY_SELECT_Pin 							GPIO_PIN_0
+#define KEY_SELECT_GPIO_Port 					GPIOB
+
+
+//EKY CONFIRM GPIO
+#define KEY_CONFIRM_Pin 						GPIO_PIN_3
+#define KEY_CONFIRM_GPIO_Port 					GPIOB
+
+
+
+
+
+//LED RELAY GPIO
+#define LED_RELAY_A_Pin 					GPIO_PIN_4
+#define LED_RELAY_A_GPIO_Port 				GPIOA
+
+#define LED_RELAY_B_Pin 					GPIO_PIN_5
+#define LED_RELAY_B_GPIO_Port 				GPIOA
+
+#define LED_RELAY_C_Pin 					GPIO_PIN_6
+#define LED_RELAY_C_GPIO_Port 				GPIOA
+
+#define LED_RELAY_D_Pin 					GPIO_PIN_7
+#define LED_RELAY_D_GPIO_Port 				GPIOA
+
+//LED OF KEY
+#define LED_KEY_CTL_Pin 					GPIO_PIN_1
+#define LED_KEY_CTL_GPIO_Port 				GPIOA
+
+
+
+
 #define LED_ADD_DEC_Pin GPIO_PIN_11
 #define LED_ADD_DEC_GPIO_Port GPIOA
-#define RELAY_A_Pin GPIO_PIN_12
-#define RELAY_A_GPIO_Port GPIOA
-#define RELAY_C_Pin GPIO_PIN_13
-#define RELAY_C_GPIO_Port GPIOA
-#define KEY_CONFIRM_Pin GPIO_PIN_3
-#define KEY_CONFIRM_GPIO_Port GPIOB
+
+//RELAY GPIO
+#define RELAY_A_Pin 					GPIO_PIN_12
+#define RELAY_A_GPIO_Port 				GPIOA
+
+#define RELAY_C_Pin 				GPIO_PIN_13
+#define RELAY_C_GPIO_Port 			GPIOA
+
+
+#define RELAY_B_Pin 						GPIO_PIN_3
+#define RELAY_B_GPIO_Port 					GPIOA
+
+#define RELAY_D_Pin 						GPIO_PIN_15
+#define RELAY_D_GPIO_Port 					GPIOC
+
+
+
+
 
 /* USER CODE BEGIN Private defines */
 
