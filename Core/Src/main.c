@@ -94,8 +94,11 @@ int main(void)
   MX_ADC1_Init();
   MX_I2C1_Init();
   MX_TIM17_Init();
+
+   HAL_TIM_Base_Start_IT(&htim17);//HAL_TIM_Base_Start(&htim3);
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  delay_init(24);
   HAL_Delay(1000);
   SWDIO_GPIO_Init();
 

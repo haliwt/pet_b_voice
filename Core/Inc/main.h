@@ -109,6 +109,14 @@ void Error_Handler(void);
 #define RELAY_D_GPIO_Port 					GPIOC
 
 
+#define I2C_SCL_Pin                         GPIO_PIN_7
+#define I2C_SCL_GPIO_Port                   GPIOB
+
+#define I2C_SDA_Pin                         GPIO_PIN_14
+#define I2C_SDA_GPIO_Port                   GPIOC
+
+
+
 
 
 

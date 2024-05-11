@@ -1,7 +1,7 @@
 #include "bsp_smg.h"
 #include "bsp.h"
 
-#if 0
+
 void Run_Keep_Heat_Setup_Digital_Numbers(uint8_t value)
 {
 
@@ -15,5 +15,5 @@ void Repeat_Keep_Heat_Setup_Digital_Numbers(uint8_t value)
 
 }
 
-#endif 
+
 

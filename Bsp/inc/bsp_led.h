@@ -75,7 +75,7 @@ typedef struct _led_t_{
 extern LED_T led_t;
 
 
-void Led_Display_Content_Fun(uint8_t selitem);
+//void Led_Display_Content_Fun(uint8_t selitem);
 
 
 
@@ -87,6 +87,10 @@ void Sterilization_Led_Filcker(void);
 void Keep_Heat_Led_Filcker(void);
 
 void Keep_heat_SetUp_Led_Filcker(void);
+
+//void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg );
+
+
 
 
 #endif 

@@ -255,16 +255,16 @@ void TM1650_Write_Data(uint8_t address,uint8_t data)
  ** Return Ref:
  ** 
  ******************************************************************************/
-void Smg_Display_Temp_Degree_Handler(void)
+void Smg_Display_Temp_Degree_Handler(uint8_t disp_temp_value, uint8_t decimal)
 {
       uint8_t decade_temp=0,uint_temp=0,decimal_point;
 
 
-      decade_temp  = ctl_t.temperature_value / 10;
-      uint_temp =   ctl_t.temperature_value  % 10;
+      decade_temp  = disp_temp_value / 10;
+      uint_temp =   disp_temp_value   % 10;
 	
 
-	  decimal_point =   ctl_t.temperature_decimal_point_value ;
+	  decimal_point =  decimal ;
    
  
   
@@ -283,20 +283,20 @@ void Smg_Display_Temp_Degree_Handler(void)
 void I2C_SDA_IN(void) 	//ÅäÖÃ³ÉÊäÈë  
 {  
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = SDA_Pin 	;
+	GPIO_InitStruct.Pin = I2C_SDA_Pin 	;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SDA_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(I2C_SDA_GPIO_Port, &GPIO_InitStruct);
 } 
 void I2C_SDA_OUT(void)//ÅäÖÃ³ÉÊä³ö
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = SDA_Pin 	;
+	GPIO_InitStruct.Pin = I2C_SDA_Pin 	;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SDA_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(I2C_SDA_GPIO_Port, &GPIO_InitStruct);
 	
 }
 
@@ -318,10 +318,10 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
+	  decimal_point =   0;//g_ntc.temperature_decimal_point_value ;
    
  
-//   if(ctl_t.gTimer_smg_turn_on < 100){ //20*10 =200ms
+//   if(g_ntc.gTimer_smg_turn_on < 100){ //20*10 =200ms
 	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	     
 		
@@ -356,10 +356,10 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
+	  decimal_point =   0;//g_ntc.temperature_decimal_point_value ;
    
  
-   if(ctl_t.gTimer_smg_turn_on < 300){ //20*10 =200ms
+  // if(g_ntc.gTimer_smg_turn_on < 300){ //20*10 =200ms
 	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	     
 		
@@ -372,21 +372,21 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 	    TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
 
 
-   	}
-	else if(ctl_t.gTimer_smg_turn_on >299  && ctl_t.gTimer_smg_turn_on < 601){
+   	
+	//else if(g_ntc.gTimer_smg_turn_on >299  && g_ntc.gTimer_smg_turn_on < 601){
 
 	     TM1650_Write_Data(0x48,0x00);
-    }
-	else{
-	  ctl_t.gTimer_smg_turn_on =0;
-	 
+   // }
+	//else{
+	//  g_ntc.gTimer_smg_turn_on =0;
+	// 
 
 	}
 
 	
 	
 
-}
+
 
 
 
