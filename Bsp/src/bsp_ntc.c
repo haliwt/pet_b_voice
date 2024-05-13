@@ -250,7 +250,7 @@ void Read_NTC_Temperature_Power_On(void)
 	*
 	*
 ******************************************************************************/
-void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t temp_value)
+void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t set_temp_value)
 {
     
     
@@ -266,7 +266,7 @@ void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t temp_value
      
 	 
 	 if(set_temp_flag== 1){
-         if(temp_value >= g_ntc.temperature_value){
+         if(set_temp_value >= g_ntc.temperature_value){
 //                   g_ntc.relay_keep_temp_flag =1;
 //			       KEEP_HEAT_LED_ON();
 //	               RELAY_KEEP_TEMP_SetHigh();
@@ -286,7 +286,7 @@ void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t temp_value
 
 	 }
 
-	// Smg_Display_Temp_Degree_Handler(g_ntc.temperature_value, g_ntc.temperature_decimal_point_value);
+	 Smg_Display_Temp_Degree_Handler(g_ntc.temperature_value, g_ntc.temperature_decimal_point_value);
   
 
 }

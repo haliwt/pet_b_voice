@@ -297,6 +297,8 @@ static void vTaskMsgPro(void *pvParameters)
 
         }
 
+        Read_NTC_Temperature_Value_Handler(1,34);
+
        
        }
 }
