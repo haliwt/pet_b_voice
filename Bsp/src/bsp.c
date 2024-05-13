@@ -14,6 +14,8 @@ static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
 static void AppObjCreate (void);
 
+#if 0
+
 //static QueueSetHandle_t xQueueSet;          /* 定义队列集 */
 //QueueHandle_t           xQueue1;            /* 定义队列1 */
 //QueueHandle_t           xQueue2;            /* 定义队列2 */
@@ -25,6 +27,11 @@ static void AppObjCreate (void);
 #define QUEUE_ITEM_SIZE       					  sizeof(uint8_t)    /* 队列中每条消息的大小 */
 #define SEMAPHORE_BINARY_LENGTH 					1                   /* 二值信号量的有效长度 */
 #define QUEUESET_LENGTH       					  ((3 * QUEUE_LENGTH) + SEMAPHORE_BINARY_LENGTH)  /* 队列集支持的消息个数 */
+#endif 
+
+QueueHandle_t           xQueue;             /* 定义队列 */
+#define QUEUE_LENGTH    2                   /* 队列支持的消息个数 */
+#define QUEUE_ITEM_SIZE sizeof(uint8_t)     /* 队列中每条消息的大小 */
 
 
 /*
@@ -367,7 +374,7 @@ static void AppTaskCreate (void)
 */
 static void AppObjCreate (void)
 {
-   #if 1
+   #if 0
    /* 创建10个uint8_t型消息队列 */
 	xQueue1 = xQueueCreate(10, sizeof(uint8_t));
     if( xQueue1 == 0 )
@@ -381,6 +388,9 @@ static void AppObjCreate (void)
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
     }
+
+      /* 创建队列 */
+   
 	#endif 
 
     #if 0
@@ -400,6 +410,9 @@ static void AppObjCreate (void)
 	
     //xQueueAddToSet(xSemaphore, xQueueSet);
     #endif 
+
+    xQueue1 = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
+    xQueue2 = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
 }
 
 
