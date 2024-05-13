@@ -265,19 +265,7 @@ static void vTaskMsgPro(void *pvParameters)
 		}
        else{
 
-//       KEEP_HEAT_LED_OFF()	;
-//       HAL_Delay(100);
-//       KEEP_HEAT_LED_ON()	;
-//       HAL_Delay(100);
-
-
-       #if 1
-
-       
-
-        #endif 
-
-        if( g_tMsg.confirm_short_key ==1 && gtimer_t.gTimer_confirm_short_key > 0){
+         if( g_tMsg.confirm_short_key ==1 && gtimer_t.gTimer_confirm_short_key > 0){
             gtimer_t.gTimer_confirm_short_key=0;
              g_tMsg.confirm_short_key =0;
              g_tMsg.confirm_key_counter=0;
@@ -288,9 +276,8 @@ static void vTaskMsgPro(void *pvParameters)
          }
          else if(KEY_CONFIRM_FUN() ==1 &&  g_tMsg.confirm_key_counter==1){
 
-           
-
-           g_tMsg.confirm_key_counter=0;
+          g_tMsg.confirm_key_counter=0;
+          g_tMsg.ucMessageID = 0; 
 
            TAPE_LED_ON();
            FAN_LED_OFF();
@@ -298,7 +285,7 @@ static void vTaskMsgPro(void *pvParameters)
 
         }
          
-         if(gtimer_t.gTimer_led_blink < 40){ //300ms
+        if(gtimer_t.gTimer_led_blink < 40){ //300ms
            KEEP_HEAT_LED_OFF()	;
         }
         else if(gtimer_t.gTimer_led_blink >39 && gtimer_t.gTimer_led_blink < 81){
@@ -311,13 +298,7 @@ static void vTaskMsgPro(void *pvParameters)
         }
 
        
-
-        
-
-    
-		
-  	//vTaskDelay(20);
-    }
+       }
 }
 }
 /*
