@@ -57,10 +57,11 @@ typedef struct Msg
     uint8_t     ucMessageExitSetTemp;
     uint8_t     select_key_pressd_flag;
     uint8_t     confirm_key_counter;
+    uint8_t     confirm_short_key;
 	int8_t 	    dsip_temp_number;
 	uint8_t 	ulData[4];
     uint8_t     usData[2];
-    uint16_t     ucMessageID;
+    uint16_t    ucMessageID;
 }MSG_T;
 
 MSG_T   g_tMsg; /* 定义一个结构体用于消息队列 */
@@ -190,34 +191,47 @@ static void vTaskLED(void *pvParameters)
 	MSG_T *ptMsg;
 	BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为200ms */
+
+    
 	
     while(1)
     {
 		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
 		                         &g_tMsg.ucMessageID,  		   /* 这里获取的是结构体的地址 */
-		                        xMaxBlockTime);//portMAX_DELAY);/* 设置阻塞时间 */
+		                         portMAX_DELAY);//portMAX_DELAY);/* 设置阻塞时间 */
 
        
 		
 		
-		if(xResult == pdPASS && KEY_CONFIRM_FUN() ==1)
+		if(xResult == pdPASS && KEY_CONFIRM_FUN() ==0)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
 			//printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
 			///printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
-			g_tMsg.ucMessageID =0;
-			TAPE_LED_ON();
-            FAN_LED_OFF();
-		}
-        
-		if(xResult == pdPASS && g_tMsg.ucMessageID > 0x85)
-		{
-		       g_tMsg.ucMessageID =0;
-              TAPE_LED_OFF();
-              FAN_LED_OFF();
+			// g_tMsg.ucMessageID ++ ;
+             if(g_tMsg.ucMessageID > 0x80){
+             g_tMsg.ucMessageID = 0; 
+             g_tMsg.confirm_short_key =1;
+             gtimer_t.gTimer_confirm_short_key=0;
+             TAPE_LED_OFF();
+             FAN_LED_OFF();
+
+             }
+		
+		    if(g_tMsg.ucMessageID< 80 ){
+                
+                if(g_tMsg.confirm_short_key ==1)
+                  g_tMsg.confirm_key_counter=0;
+                else 
+                   g_tMsg.confirm_key_counter=1;
+           
+    	   }
               
 		}
+
+      
+        
     }
 }
 
@@ -247,22 +261,47 @@ static void vTaskMsgPro(void *pvParameters)
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ucQueueMsgValue = %d\r\n", ucQueueMsgValue);
 			FAN_LED_ON();
-            TAPE_LED_ON();
+            TAPE_LED_OFF();
 		}
        else{
 
-       KEEP_HEAT_LED_OFF()	;
-       HAL_Delay(100);
-       KEEP_HEAT_LED_ON()	;
-       HAL_Delay(100);
+//       KEEP_HEAT_LED_OFF()	;
+//       HAL_Delay(100);
+//       KEEP_HEAT_LED_ON()	;
+//       HAL_Delay(100);
 
 
-       #if 0
+       #if 1
 
-        if(gtimer_t.gTimer_led_blink < 30){ //300ms
+       
+
+        #endif 
+
+        if( g_tMsg.confirm_short_key ==1 && gtimer_t.gTimer_confirm_short_key > 0){
+            gtimer_t.gTimer_confirm_short_key=0;
+             g_tMsg.confirm_short_key =0;
+             g_tMsg.confirm_key_counter=0;
+             TAPE_LED_OFF();
+             FAN_LED_OFF();
+               
+
+         }
+         else if(KEY_CONFIRM_FUN() ==1 &&  g_tMsg.confirm_key_counter==1){
+
+           
+
+           g_tMsg.confirm_key_counter=0;
+
+           TAPE_LED_ON();
+           FAN_LED_OFF();
+
+
+        }
+         
+         if(gtimer_t.gTimer_led_blink < 40){ //300ms
            KEEP_HEAT_LED_OFF()	;
         }
-        else if(gtimer_t.gTimer_led_blink >29 && gtimer_t.gTimer_led_blink < 61){
+        else if(gtimer_t.gTimer_led_blink >39 && gtimer_t.gTimer_led_blink < 81){
          
             KEEP_HEAT_LED_ON()	;
          }
@@ -271,17 +310,16 @@ static void vTaskMsgPro(void *pvParameters)
 
         }
 
-        #endif 
-      
-         
+       
 
-       }
-     
+        
+
+    
 		
   	//vTaskDelay(20);
     }
 }
-
+}
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskStart
@@ -297,7 +335,7 @@ static void vTaskStart(void *pvParameters)
     
 	MSG_T   *ptMsg;
 	uint8_t ucCount = 0;
-	
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为300ms */
 
 
     while(1)
@@ -315,7 +353,7 @@ static void vTaskStart(void *pvParameters)
                 g_tMsg.ucMessageID =1;
 				
 					/* 向消息队列发数据，如果消息队列满了，等待10个时钟节拍 */
-				xQueueSend(xQueue1,&g_tMsg.ucMessageID,portMAX_DELAY);
+				xQueueSend(xQueue1,&g_tMsg.ucMessageID,0);
 						/* 发送失败，即使等待了10个时钟节拍 */
 						//printf("K2键按下，向xQueue1发送数据失败，即使等待了10个时钟节拍\r\n");
 					
@@ -324,21 +362,23 @@ static void vTaskStart(void *pvParameters)
 
 
         }
-        else if(KEY_CONFIRM_FUN() ==0){
+        if(KEY_CONFIRM_FUN() ==0){
 
-                   // ptMsg->ucMessageID++;
-					//ptMsg->ulData[0]++;;
-					//ptMsg->usData[0]++;
-					g_tMsg.ucMessageID++;
-					
-					/* 使用消息队列实现指针变量的传递 */
-					xQueueSend(xQueue2,                  /* 消息队列句柄 */
-								  &g_tMsg.ucMessageID,           /* 发送结构体指针变量ptMsg的地址 */
-								 portMAX_DELAY);
-					
+                  
+    					g_tMsg.ucMessageID++;
+    					
+    					/* 使用消息队列实现指针变量的传递 */
+    					xQueueSend(xQueue2,                  /* 消息队列句柄 */
+    								  &g_tMsg.ucMessageID,           /* 发送结构体指针变量ptMsg的地址 */
+    								0);
 
 
-        }
+                        
+                       
+
+                   
+	   }
+        
        
         vTaskDelay(10);
     }

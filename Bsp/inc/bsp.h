@@ -58,6 +58,7 @@ typedef struct hard_timer{
     uint8_t gTimer_select_fun_key_timer;
     uint8_t gTimer_init_gpio;
     uint8_t gTimer_led_blink;
+    uint8_t gTimer_confirm_short_key;
 
 }HARD_TIMER_T;
 
