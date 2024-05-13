@@ -13,21 +13,12 @@
 #define KEY_UP_K2		KEY_2_UP
 #define KEY_LONG_K2		KEY_2_LONG
 
-#define KEY_DOWN_K3		KEY_3_DOWN
-#define KEY_UP_K3		KEY_3_UP
-#define KEY_LONG_K3		KEY_3_LONG
 
-#define KEY_DOWN_K4		KEY_4_DOWN
-#define KEY_UP_K4		KEY_4_UP
-#define KEY_LONG_K4		KEY_4_LONG
+#define KEY_SELECT_FUN()    HAL_GPIO_ReadPin(KEY_SELECT_GPIO_Port ,  KEY_SELECT_Pin)
 
-#define KEY_DOWN_K5		KEY_5_DOWN
-#define KEY_UP_K5		KEY_5_UP
-#define KEY_LONG_K5		KEY_5_LONG
+#define KEY_CONFIRM_FUN()     HAL_GPIO_ReadPin(KEY_CONFIRM_GPIO_Port  ,  KEY_CONFIRM_Pin)
 
-#define KEY_DOWN_K6		KEY_6_DOWN
-#define KEY_UP_K6		KEY_6_UP
-#define KEY_LONG_K6		KEY_6_LONG
+
 
 
 
@@ -37,12 +28,7 @@ typedef enum
 {
 	KID_K1 = 0,
 	KID_K2,
-	KID_K3,
-	KID_JOY_U,
-	KID_JOY_D,
-	KID_JOY_L,
-	KID_JOY_R,
-	KID_JOY_OK
+
 }KEY_ID_E;
 
 /*
