@@ -206,7 +206,7 @@ static void vTaskLED(void *pvParameters)
 			//printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
 			///printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
 			TAPE_LED_ON();
-            KILL_LED_OFF();
+            FAN_LED_OFF();
 		}
 		else
 		{
@@ -242,7 +242,7 @@ static void vTaskMsgPro(void *pvParameters)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ucQueueMsgValue = %d\r\n", ucQueueMsgValue);
-			KILL_LED_ON();
+			FAN_LED_ON();
             TAPE_LED_OFF();
 		}
        else{

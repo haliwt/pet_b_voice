@@ -39,7 +39,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 ********************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if 0
+
     static uint16_t tm0;
 	static uint8_t tm1;
     if(htim->Instance==TIM17){
@@ -62,7 +62,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	   
 	 
 	}
-    #endif 
+  
  }
 
 
