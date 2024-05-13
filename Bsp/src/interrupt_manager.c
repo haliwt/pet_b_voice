@@ -46,6 +46,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        tm0++;
        tm1++;
 
+       if(tm1 > 9){
+           tm1 =0;
+           gtimer_t.gTimer_led_blink++;
+
+
+       }
+
        if(tm0 > 999){
 
          tm0 =0;

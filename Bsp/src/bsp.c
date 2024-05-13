@@ -52,7 +52,7 @@ static QueueHandle_t 	xQueue2 = NULL;
 typedef struct Msg
 {
 	uint8_t  	ucMessageID_setTempValue;
-    uint8_t     ucMessageID;
+    
     uint8_t     ucMessgelongkey;
     uint8_t     ucMessageExitSetTemp;
     uint8_t     select_key_pressd_flag;
@@ -60,6 +60,7 @@ typedef struct Msg
 	int8_t 	    dsip_temp_number;
 	uint8_t 	ulData[4];
     uint8_t     usData[2];
+    uint16_t     ucMessageID;
 }MSG_T;
 
 MSG_T   g_tMsg; /* 定义一个结构体用于消息队列 */
@@ -193,7 +194,7 @@ static void vTaskLED(void *pvParameters)
     while(1)
     {
 		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
-		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
+		                         &g_tMsg.ucMessageID,  		   /* 这里获取的是结构体的地址 */
 		                        xMaxBlockTime);//portMAX_DELAY);/* 设置阻塞时间 */
 
        
@@ -205,14 +206,17 @@ static void vTaskLED(void *pvParameters)
 			//printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
 			//printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
 			///printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
+			g_tMsg.ucMessageID =0;
 			TAPE_LED_ON();
             FAN_LED_OFF();
 		}
-		else
+        
+		if(xResult == pdPASS && g_tMsg.ucMessageID > 0x85)
 		{
-			/* 超时 */
-			//bsp_LedToggle(2);
-			///bsp_LedToggle(3);
+		       g_tMsg.ucMessageID =0;
+              TAPE_LED_OFF();
+              FAN_LED_OFF();
+              
 		}
     }
 }
@@ -247,10 +251,28 @@ static void vTaskMsgPro(void *pvParameters)
 		}
        else{
 
-         KEEP_HEAT_LED_OFF()	;
-         HAL_Delay(200);
-         KEEP_HEAT_LED_ON()	;
-         HAL_Delay(200);
+       KEEP_HEAT_LED_OFF()	;
+       HAL_Delay(100);
+       KEEP_HEAT_LED_ON()	;
+       HAL_Delay(100);
+
+
+       #if 0
+
+        if(gtimer_t.gTimer_led_blink < 30){ //300ms
+           KEEP_HEAT_LED_OFF()	;
+        }
+        else if(gtimer_t.gTimer_led_blink >29 && gtimer_t.gTimer_led_blink < 61){
+         
+            KEEP_HEAT_LED_ON()	;
+         }
+        else{
+           gtimer_t.gTimer_led_blink=0;
+
+        }
+
+        #endif 
+      
          
 
        }
@@ -304,13 +326,14 @@ static void vTaskStart(void *pvParameters)
         }
         else if(KEY_CONFIRM_FUN() ==0){
 
-                    ptMsg->ucMessageID++;
-					ptMsg->ulData[0]++;;
-					ptMsg->usData[0]++;
+                   // ptMsg->ucMessageID++;
+					//ptMsg->ulData[0]++;;
+					//ptMsg->usData[0]++;
+					g_tMsg.ucMessageID++;
 					
 					/* 使用消息队列实现指针变量的传递 */
 					xQueueSend(xQueue2,                  /* 消息队列句柄 */
-								 (void *) &ptMsg,           /* 发送结构体指针变量ptMsg的地址 */
+								  &g_tMsg.ucMessageID,           /* 发送结构体指针变量ptMsg的地址 */
 								 portMAX_DELAY);
 					
 
