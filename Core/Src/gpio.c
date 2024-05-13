@@ -45,14 +45,14 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
    /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(I2C_SCL_GPIO_Port, I2C_SCL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(I2C_SCL_GPIO_Port, I2C_SCL_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RELAY_D_GPIO_Port, I2C_SDA_Pin|RELAY_D_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RELAY_D_GPIO_Port, I2C_SDA_Pin|RELAY_D_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_KEY_CTL_Pin|RELAY_B_Pin|LED_RELAY_A_Pin|LED_RELAY_B_Pin
-                          |LED_RELAY_C_Pin|LED_RELAY_D_Pin|LED_ADD_DEC_Pin|RELAY_A_Pin,GPIO_PIN_RESET);
+                          |LED_RELAY_C_Pin|LED_RELAY_D_Pin|LED_ADD_DEC_Pin|RELAY_A_Pin,GPIO_PIN_SET);
 
 
    /*Configure GPIO pin : PtPin */

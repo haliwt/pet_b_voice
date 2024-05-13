@@ -363,9 +363,16 @@ static void vTaskMsgPro(void *pvParameters)
 */
 static void vTaskStart(void *pvParameters)
 {
+    static uint8_t init_gpio;
+
     while(1)
     {
 		/* 按键扫描 */
+       if(init_gpio ==0 && gtimer_t.gTimer_init_gpio > 1){
+           init_gpio++ ;
+           SWDIO_GPIO_Init();
+
+        }
 		bsp_KeyScan();
         vTaskDelay(10);
     }

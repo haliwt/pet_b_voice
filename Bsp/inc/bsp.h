@@ -56,6 +56,7 @@ typedef struct hard_timer{
     uint8_t gTimer_display_relay_led;
     uint8_t gTimer_pro_disp_temp;
     uint8_t gTimer_select_fun_key_timer;
+    uint8_t gTimer_init_gpio;
 
 }HARD_TIMER_T;
 

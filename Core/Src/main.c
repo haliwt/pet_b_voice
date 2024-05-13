@@ -99,8 +99,7 @@ int main(void)
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   delay_init(24);
-  HAL_Delay(1000);
-  SWDIO_GPIO_Init();
+ 
 
   /* USER CODE END 2 */
 

@@ -54,6 +54,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
          gtimer_t.gTimer_display_relay_led++;
          gtimer_t.gTimer_pro_disp_temp++;
          gtimer_t.gTimer_select_fun_key_timer++;
+         gtimer_t.gTimer_init_gpio++;
 
 
        }

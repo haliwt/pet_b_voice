@@ -91,8 +91,8 @@ void Error_Handler(void);
 
 
 
-#define LED_ADD_DEC_Pin GPIO_PIN_11
-#define LED_ADD_DEC_GPIO_Port GPIOA
+#define LED_ADD_DEC_Pin                   GPIO_PIN_11
+#define LED_ADD_DEC_GPIO_Port             GPIOA
 
 //RELAY GPIO
 #define RELAY_A_Pin 					GPIO_PIN_12
