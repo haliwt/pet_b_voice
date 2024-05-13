@@ -181,13 +181,15 @@ static void vTaskLED(void *pvParameters)
 {
 	MSG_T *ptMsg;
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为200ms */
 	
     while(1)
     {
 		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
 		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
-		                        portMAX_DELAY);/* 设置阻塞时间 */
+		                       pdMS_TO_TICKS(200));//portMAX_DELAY);/* 设置阻塞时间 */
+
+       
 		
 		
 		if(xResult == pdPASS)
@@ -220,14 +222,14 @@ static void vTaskMsgPro(void *pvParameters)
 {
 
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为300ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为300ms */
 	uint8_t ucQueueMsgValue;
     while(1)
     {
 
 	    xResult = xQueueReceive(xQueue1,                   /* 消息队列句柄 */
 		                        (void *)&ucQueueMsgValue,  /* 存储接收到的数据到变量ucQueueMsgValue中 */
-		                         portMAX_DELAY);/* 设置阻塞时间 */
+		                        pdMS_TO_TICKS(200));//portMAX_DELAY);/* 设置阻塞时间 */
 		
 		if(xResult == pdPASS)
 		{
@@ -239,6 +241,9 @@ static void vTaskMsgPro(void *pvParameters)
        else{
 
          KEEP_HEAT_LED_OFF()	;
+         HAL_Delay(200);
+         KEEP_HEAT_LED_ON()	;
+         HAL_Delay(200);
          
 
        }
@@ -292,7 +297,7 @@ static void vTaskStart(void *pvParameters)
         }
         else if(KEY_CONFIRM_FUN() ==0){
 
-                     ptMsg->ucMessageID++;
+                    ptMsg->ucMessageID++;
 					ptMsg->ulData[0]++;;
 					ptMsg->usData[0]++;
 					
