@@ -242,12 +242,12 @@ static void vTaskMsgPro(void *pvParameters)
 		                        (void *)&ucQueueMsgValue,  /* 存储接收到的数据到变量ucQueueMsgValue中 */
 		                        xMaxBlockTime);//portMAX_DELAY);/* 设置阻塞时间 */
 		
-		if(xResult == pdPASS)
+		if(xResult == pdPASS && g_tMsg.ucMessageID==1)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ucQueueMsgValue = %d\r\n", ucQueueMsgValue);
 			FAN_LED_ON();
-            TAPE_LED_OFF();
+            TAPE_LED_ON();
 		}
        else{
 
@@ -312,10 +312,10 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
 		if(KEY_SELECT_FUN() ==0){
 
-          ucCount++;
+                g_tMsg.ucMessageID =1;
 				
 					/* 向消息队列发数据，如果消息队列满了，等待10个时钟节拍 */
-				xQueueSend(xQueue1,(void *) &ucCount,portMAX_DELAY);
+				xQueueSend(xQueue1,&g_tMsg.ucMessageID,portMAX_DELAY);
 						/* 发送失败，即使等待了10个时钟节拍 */
 						//printf("K2键按下，向xQueue1发送数据失败，即使等待了10个时钟节拍\r\n");
 					
