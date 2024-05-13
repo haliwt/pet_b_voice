@@ -188,18 +188,18 @@ static void vTaskLED(void *pvParameters)
 {
 	MSG_T *ptMsg;
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为200ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为200ms */
 	
     while(1)
     {
 		xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
 		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
-		                       pdMS_TO_TICKS(200));//portMAX_DELAY);/* 设置阻塞时间 */
+		                        xMaxBlockTime);//portMAX_DELAY);/* 设置阻塞时间 */
 
        
 		
 		
-		if(xResult == pdPASS)
+		if(xResult == pdPASS && KEY_CONFIRM_FUN() ==1)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
@@ -236,7 +236,7 @@ static void vTaskMsgPro(void *pvParameters)
 
 	    xResult = xQueueReceive(xQueue1,                   /* 消息队列句柄 */
 		                        (void *)&ucQueueMsgValue,  /* 存储接收到的数据到变量ucQueueMsgValue中 */
-		                        pdMS_TO_TICKS(200));//portMAX_DELAY);/* 设置阻塞时间 */
+		                        xMaxBlockTime);//portMAX_DELAY);/* 设置阻塞时间 */
 		
 		if(xResult == pdPASS)
 		{
