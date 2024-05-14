@@ -29,6 +29,7 @@
 #include "bsp_tm1650.h"
 #include "bsp_relay.h"
 #include "bsp_delay.h"
+#include "bsp_voice.h"
 #include "interrupt_manager.h"
 
 
@@ -46,7 +47,26 @@
 	/* ����ȫ���жϵĺ� */
 	#define ENABLE_INT()	__set_PRIMASK(0)	/* ʹ��ȫ���ж� */
 	#define DISABLE_INT()	__set_PRIMASK(1)	/* ��ֹȫ���ж� */
+    
 #endif
+
+typedef enum relay_fun{
+
+   open_tape_item =1,
+   close_tape_item = 2,
+
+   open_fan_item =3,
+   close_fan_item=4,
+
+   open_kill_item=5,
+   close_kill_item=6,
+
+   open_temp_item = 7,
+   close_temp_item =8,
+
+
+
+}RELAY_FUN;
 
 typedef struct hard_timer{
 
@@ -59,11 +79,15 @@ typedef struct hard_timer{
     uint8_t gTimer_init_gpio;
     uint8_t gTimer_led_blink;
     uint8_t gTimer_confirm_short_key;
+    uint8_t gTimer_disp_set_temp ;
     
 
 }HARD_TIMER_T;
 
 extern HARD_TIMER_T  gtimer_t;
+
+
+
 
 
 

@@ -1,34 +1,8 @@
 #include "interrupt_manager.h"
 #include "bsp.h"
 
-#if 0
-void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
-{
-
-   if(GPIO_Pin == INPUT_KEY_CONFIRM_Pin){
-	 if(CONFIRM_KEY_VALUE() == KEY_DOWN){
-
-       pro_t.iwdg_detected_times =0;
-
-	 }
 
 
-   }
-
-   if(GPIO_Pin == INPUT_KEY_FUN_Pin){
-	 if(CONFIRM_KEY_VALUE() == KEY_DOWN){
-
-       pro_t.iwdg_detected_times =0;
-
-	 }
-
-
-   }
-
-
-
-}
-#endif 
 
 /*******************************************************************************
   *
@@ -50,10 +24,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
            tm1 =0;
            gtimer_t.gTimer_led_blink++;
            led_t.gTimer_flicker++;
-           
-
-
-       }
+         }
 
        if(tm0 > 999){
 
@@ -65,6 +36,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
          gtimer_t.gTimer_select_fun_key_timer++;
          gtimer_t.gTimer_init_gpio++;
          gtimer_t.gTimer_confirm_short_key++;
+         
+         gtimer_t.gTimer_disp_set_temp++;
+         //led blink
          led_t.gTimer_select_fun ++;
 
 
@@ -75,5 +49,58 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
   
  }
+
+/**
+  * 函数功能：重新定向c库函数printf到DEBUG_USARTx
+  * ÊäÈë²ÎÊý: ÎÞ
+  * ·µ »Ø Öµ: ÎÞ
+  * Ëµ    Ã÷£ºÎÞ
+  */
+int fputc(int ch, FILE *f)
+{
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xffff);
+  return ch;
+}
+
+/**
+  * 函数功能： 重新定向c库函数getchar,scanf到DEBUG_USARTx
+  * ÊäÈë²ÎÊý: ÎÞ
+  * ·µ »Ø Öµ: ÎÞ
+  * Ëµ    Ã÷£ºÎÞ
+  */
+int fgetc(FILE * f)
+{
+  uint8_t ch = 0;
+  HAL_UART_Receive(&huart2,&ch, 1, 0xffff);
+  return ch;
+}
+
+
+/********************************************************************************
+**
+*Function Name:void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+*Function :UART callback function  for UART interrupt for transmit data
+*Input Ref: structure UART_HandleTypeDef pointer
+*Return Ref:NO
+*
+*******************************************************************************/
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart==&huart2) //voice  sound send 
+	{
+		transOngoingFlag=0; //UART Transmit interrupt flag =0 ,RUN
+	}
+
+//	if(huart== &huart2){
+//
+//       usart2_transOngoingFlag =0;
+//
+//	}
+
+}
+
+
+
+
 
 

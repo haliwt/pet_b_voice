@@ -539,6 +539,7 @@ static void UartIRQ(UART_T *_pUart)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if 0
 #if UART1_FIFO_EN == 1
 void USART1_IRQHandler(void)
 {
@@ -553,7 +554,7 @@ void USART2_IRQHandler(void)
 }
 #endif
 
-
+#endif 
 
 /*
 *********************************************************************************************************
@@ -563,10 +564,11 @@ void USART2_IRQHandler(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if 0
 int fputc(int ch, FILE *f)
 {
 #if 1	/* 将需要printf的字符通过串口中断FIFO发送出去，printf函数会立即返回 */
-	comSendChar(COM1, ch);
+	comSendChar(COM2, ch);
 
 	return ch;
 #else	/* 采用阻塞方式发送每个字符,等待数据发送完毕 */
@@ -595,7 +597,7 @@ int fgetc(FILE *f)
 #if 1	/* 从串口接收FIFO中取1个数据, 只有取到数据才返回 */
 	uint8_t ucData;
 
-	while(comGetChar(COM1, &ucData) == 0);
+	while(comGetChar(COM2, &ucData) == 0);
 
 	return ucData;
 #else
@@ -606,4 +608,5 @@ int fgetc(FILE *f)
 #endif
 }
 
+#endif 
 

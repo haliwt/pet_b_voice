@@ -19,6 +19,402 @@ static uint8_t relay_keep_temp_fun(void);
 
 uint8_t led_on_of_number;
 
+void Voice_Run_Cmd(uint8_t cmd)
+{
+    
+    switch(cmd){
+
+    case open_tape:
+
+         
+         data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         
+
+         return cmd;
+
+
+    break;
+
+
+    case close_tape:
+
+        data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         return cmd;
+
+
+    break;
+
+    case   open_fan:
+
+         data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         return cmd;
+
+    break;
+
+
+    case clouse_fan:
+
+         data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         return cmd;
+
+
+    break;
+
+
+    case open_kill:
+
+       data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         return cmd;
+
+    break;
+
+    case close_kill:
+
+        data2 = cmd - 0x22;
+
+         data1 = data2 >> 1;
+
+         data1 ++;
+
+         data3 = cmd - data1;
+         voice_send_function_cmd(data1,data3);
+
+         return cmd;
+
+    break;
+
+    case temp_degree_16 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_17 : 
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_18 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+
+    case temp_degree_19 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_20: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_21 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_22: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_23 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_24: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_25 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_26: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_27 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_28: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_29 : // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    case temp_degree_30: // = 0x2E,
+
+       
+            data2 = cmd - 0x22;
+    
+            data1 = data2 >> 1;
+    
+            data1 ++;
+    
+            data3 = cmd - data1;
+            voice_send_function_cmd(data1,data3);
+    
+            return cmd;
+
+      
+
+
+    break;
+
+    
+    }
+
+}
+
+
 #if 0
 
 /*********************************************************************************************************

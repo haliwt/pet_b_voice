@@ -89,7 +89,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t confirm_key)
        *
 *************************************************************************/
 void Tape_Led_Filcker(void)
-   {
+ {
       
        if(led_t.gTimer_flicker < 40){ //400ms
    
@@ -109,11 +109,11 @@ void Tape_Led_Filcker(void)
    
        }
    
-   }
+ }
    
    
-   void Fan_Led_Flicker(void)
-   {
+ void Fan_Led_Flicker(void)
+ {
        if(led_t.gTimer_flicker < 40){ //500ms
        
             FAN_LED_ON()  ;

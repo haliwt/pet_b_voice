@@ -57,11 +57,12 @@ void bsp_ctl_init(void);
 
 void KEY_Confirm_Handler(uint8_t select_num, uint8_t *ptmsg,uint8_t key_long);
 
-void KEY_Long_Confirm_Handler(void);
+
 
 void Confirm_KEY_Long_Handler(void);
 
 
+void Voice_Run_Cmd(uint8_t cmd);
 
 #endif 
 

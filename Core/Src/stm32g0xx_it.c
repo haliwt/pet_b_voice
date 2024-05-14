@@ -163,7 +163,7 @@ void TIM17_IRQHandler(void)
 
   /* USER CODE END TIM17_IRQn 1 */
 }
-#if 0
+#if 1
 /**
   * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
   */

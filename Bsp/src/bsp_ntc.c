@@ -12,6 +12,7 @@
 
 
 
+
 uint16_t *pArray[23];
 uint8_t find_out_temperature_value;
 uint8_t temp_uint16_t_vlue;
@@ -229,17 +230,20 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 	*
 	*
 ******************************************************************************/
-void Read_NTC_Temperature_Power_On(void)
+uint8_t Read_NTC_Temperature_Degree(void)
 {
 
       
-  g_ntc.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
-  temp_uint16_t_vlue= g_ntc.ntc_voltage_value/100;
-  length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
+     g_ntc.ntc_voltage_value= Read_NTC_Temperature_Voltage();
+     temp_uint16_t_vlue= g_ntc.ntc_voltage_value /100;
+	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
     
-  g_ntc.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+   	 g_ntc.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-  Display_Speicial_Temperature_Value(g_ntc.temp_degree);
+	 Display_Speicial_Temperature_Value(g_ntc.temp_degree);
+
+     return g_ntc.temperature_value;
+     
 
 }
 
@@ -250,7 +254,7 @@ void Read_NTC_Temperature_Power_On(void)
 	*
 	*
 ******************************************************************************/
-void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t set_temp_value)
+void Read_NTC_Temperature_Value_Handler(void)
 {
     
     
@@ -264,29 +268,10 @@ void Read_NTC_Temperature_Value_Handler(uint8_t set_temp_flag,uint8_t set_temp_v
 	 Display_Speicial_Temperature_Value(g_ntc.temp_degree);
 
      
-	 
-	 if(set_temp_flag== 1){
-         if(set_temp_value >= g_ntc.temperature_value){
-//                   g_ntc.relay_keep_temp_flag =1;
-//			       KEEP_HEAT_LED_ON();
-//	               RELAY_KEEP_TEMP_SetHigh();
-//				   KEY_FUN_CONFIRM_LED_ON() ;  
-//				   ADD_DEC_LED_OFF();
+	
+    Smg_Display_Temp_Degree_Handler(g_ntc.temperature_value, g_ntc.temperature_decimal_point_value);
 
-			  }
-              else{
-//                  g_ntc.relay_keep_temp_flag =0;
-//			      KEEP_HEAT_LED_OFF();
-//	              RELAY_KEEP_TEMP_SetLow();
-//				  KEY_FUN_CONFIRM_LED_ON() ;
-//				   ADD_DEC_LED_OFF();
-
-              }
-
-
-	 }
-
-	 Smg_Display_Temp_Degree_Handler(g_ntc.temperature_value, g_ntc.temperature_decimal_point_value);
+    
   
 
 }
