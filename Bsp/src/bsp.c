@@ -339,20 +339,22 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
     static uint8_t init_gpio;
-    
-	MSG_T   *ptMsg;
+    MSG_T   *ptMsg;
 	uint8_t ucCount = 0;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为300ms */
+   
+
+     if(init_gpio ==0 && gtimer_t.gTimer_init_gpio > 1){
+           init_gpio++ ;
+          SWDIO_GPIO_Init();
+
+     }
 
 
     while(1)
     {
 		/* 按键扫描 */
-//       if(init_gpio ==0 && gtimer_t.gTimer_init_gpio > 1){
-//           init_gpio++ ;
-//           SWDIO_GPIO_Init();
-//
-//        }
+
         
 		//bsp_KeyScan();
 		if(KEY_SELECT_FUN() ==0){
