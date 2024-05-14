@@ -2,26 +2,15 @@
 #include "bsp.h"
 
 
-uint8_t (*relay_tape_state)(void);
-uint8_t (*relay_fan_state)(void);
-uint8_t (*relay_kill_state)(void);
-uint8_t (*relay_temp_flag_state)(void);
-uint8_t (*relay_keep_temp_state)(void);
 
-
-static uint8_t relay_tape_fun(void);
-static uint8_t relay_fan_fun(void);
-static uint8_t relay_kill_fun(void);
-static uint8_t relay_temp_flag_fun(void);
-static uint8_t relay_keep_temp_fun(void);
 
 
 
 uint8_t led_on_of_number;
-
+#if 0
 void Voice_Run_Cmd(uint8_t cmd)
 {
-    
+    uint8_t data1,data2,data3;
     switch(cmd){
 
     case open_tape:
@@ -413,7 +402,7 @@ void Voice_Run_Cmd(uint8_t cmd)
     }
 
 }
-
+#endif 
 
 #if 0
 

@@ -3,6 +3,7 @@
 HARD_TIMER_T  gtimer_t;
 
 
+uint8_t voice_inputBuf[1];
 
 
 
@@ -636,10 +637,10 @@ static void Voice_Run_Cmd(uint8_t cmd)
      *
      *
  ***********************************************************************************/
-static uint8_t voice_decoder_temp_value(uint8_t temp)
+static uint8_t voice_decoder_temp_value(uint8_t cmd)
 {
     uint8_t data1,data2,data3;
-    switch(temp){
+    switch(cmd){
 
     case temp_degree_16 : // = 0x2E,
 
@@ -951,11 +952,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     
      if(huart->Instance==USART2){
 
-		switch(state_uart1)
+		switch(state_stp)
 		{
 		case 0:  //#0
 			if(voice_inputBuf[0]==0xA5){  //hex :4D - "M" -fixed mainboard
-				state_uart1=1; //=1
+				state_stp=1; //=1
               
 			}
 			else{

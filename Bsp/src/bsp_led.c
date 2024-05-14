@@ -78,7 +78,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t confirm_key)
 
  }
 
-
+}
  
 /*************************************************************************
        *
