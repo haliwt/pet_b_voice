@@ -55,11 +55,13 @@ typedef struct Msg
     
     uint8_t     ucMessgelongkey;
     uint8_t     ucMessageExitSetTemp;
-    uint8_t     select_key_pressd_flag;
+
     uint8_t     confirm_key_counter;
     uint8_t     confirm_short_key;
+    uint8_t     confirm_key_flag;
 	int8_t 	    dsip_temp_number;
-	uint8_t 	ulData[4];
+	uint8_t 	select_led_flag;
+    
     uint8_t     usData[2];
     uint16_t    ucMessageID;
 }MSG_T;
@@ -223,8 +225,10 @@ static void vTaskLED(void *pvParameters)
                 
                 if(g_tMsg.confirm_short_key ==1)
                   g_tMsg.confirm_key_counter=0;
-                else 
+                else{
                    g_tMsg.confirm_key_counter=1;
+
+                 }
            
     	   }
               
@@ -260,8 +264,12 @@ static void vTaskMsgPro(void *pvParameters)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
 			//printf("接收到消息队列数据ucQueueMsgValue = %d\r\n", ucQueueMsgValue);
-			FAN_LED_ON();
-            TAPE_LED_OFF();
+			g_tMsg.select_led_flag ++ ;
+            g_tMsg.confirm_key_flag=0;
+            
+			//FAN_LED_ON();
+            //TAPE_LED_OFF(); // g_tMsg.select_led_flag = 1, TAPE_LED_OFF()
+            ////FAN_LED_ON(); // g_tMsg.select_led_flag = 2, FAN_LED_OFF()
 		}
        else{
 
@@ -278,24 +286,27 @@ static void vTaskMsgPro(void *pvParameters)
 
           g_tMsg.confirm_key_counter=0;
           g_tMsg.ucMessageID = 0; 
+          g_tMsg.confirm_key_flag = 1;
 
-           TAPE_LED_ON();
-           FAN_LED_OFF();
+          // TAPE_LED_ON();
+          // FAN_LED_OFF();
 
 
         }
+        Led_Display_Content_Fun(g_tMsg.select_led_flag, g_tMsg.confirm_key_flag=1);
+        
          
-        if(gtimer_t.gTimer_led_blink < 40){ //300ms
-           KEEP_HEAT_LED_OFF()	;
-        }
-        else if(gtimer_t.gTimer_led_blink >39 && gtimer_t.gTimer_led_blink < 81){
-         
-            KEEP_HEAT_LED_ON()	;
-         }
-        else{
-           gtimer_t.gTimer_led_blink=0;
-
-        }
+//        if(gtimer_t.gTimer_led_blink < 40){ //300ms
+//           KEEP_HEAT_LED_OFF()	;
+//        }
+//        else if(gtimer_t.gTimer_led_blink >39 && gtimer_t.gTimer_led_blink < 81){
+//         
+//            KEEP_HEAT_LED_ON()	;
+//         }
+//        else{
+//           gtimer_t.gTimer_led_blink=0;
+//
+//        }
 
         Read_NTC_Temperature_Value_Handler(1,34);
 

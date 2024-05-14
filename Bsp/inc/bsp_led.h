@@ -66,6 +66,8 @@ typedef struct _led_t_{
 
     uint8_t gTimer_flicker;
 	uint8_t gTimer_keey_heat_flicker;
+    uint8_t gTimer_select_fun;
+   
 
 
 
@@ -88,7 +90,8 @@ void Keep_Heat_Led_Filcker(void);
 
 void Keep_heat_SetUp_Led_Filcker(void);
 
-//void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg );
+
+void Led_Display_Content_Fun(uint8_t selitem, uint8_t confirm_key);
 
 
 

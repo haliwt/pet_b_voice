@@ -16,8 +16,15 @@ LED_T led_t;
 	*Return Ref:NO
 	*
 *************************************************************************/
-#if 0
-void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
+/*************************************************************************
+	*
+	*Function Name: void Led_Display_Content_Fun(uint8_t selitem)
+	*Function : flicker of fan led
+	*Input Ref: wich of led flicker -selitem
+	*Return Ref:NO
+	*
+*************************************************************************/
+void Led_Display_Content_Fun(uint8_t selitem, uint8_t confirm_key)
 {
 
    switch(selitem){
@@ -30,45 +37,20 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
    case FAN_LED:
 
 
-		if(*(ptmsg+1)== tape_enable){
-			FAN_LED_ON();
-		    
-		    RELAY_FAN_SetHigh()	;
-
-		}
-		else{
-    		FAN_LED_OFF();
-    		RELAY_FAN_SetLow();
-
-		}
-
-		if(*(ptmsg+2)== sterilization_enable ){
-		    KILL_LED_ON();
-		}
-		else
-		    KILL_LED_OFF();
-
-		
-
-		if(*(ptmsg+3)== keep_heat_enable){
-		  KEEP_HEAT_LED_ON();
-          RELAY_KEEP_TEMP_SetHigh();
-	  	}
-	     else{ 
-	  		KEEP_HEAT_LED_OFF();
-            RELAY_KEEP_TEMP_SetLow();
-
-
-           }
-
-		
-   	 
-	 if(gtimer_t.gTimer_select_fun_key_timer < 6){
+      if(led_t.gTimer_select_fun < 5){
         Tape_Led_Filcker();
      }
      else{
-         if(*ptmsg == confirm_disable){
-            TAPE_LED_OFF();
+        
+          if(confirm_key== 1){
+
+
+           TAPE_LED_OFF();
+          }
+          else{
+
+           TAPE_LED_ON();
+
           }
 
      }
@@ -78,45 +60,13 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
    case TAPE_LED:
 
-      if(*ptmsg == fan_enable){
-		TAPE_LED_ON();//TAPE_LED_ON();
-		
-		RELAY_KILL_SetHigh()	;
-		}
-		else{
-		TAPE_LED_OFF();//TAPE_LED_OFF();
-		RELAY_KILL_SetLow()	;
-
-		}
-
-        
-
-		if(*(ptmsg+2)== sterilization_enable ){
-            RELAY_TAPE_SetHigh();
-		    KILL_LED_ON();
-		}
-		else{
-            RELAY_TAPE_SetLow();
-		    KILL_LED_OFF();//KILL_LED_OFF();
-
-        }
-
-		
-
-		if(*(ptmsg+3)== keep_heat_enable){
-          RELAY_KEEP_TEMP_SetHigh();
-		  KEEP_HEAT_LED_ON();
-	  	}
-	     else{
-            RELAY_KEEP_TEMP_SetLow();
-	  		KEEP_HEAT_LED_OFF();//KEEP_HEAT_LED_OFF();
-          }
+      
    	  
-	 if(gtimer_t.gTimer_select_fun_key_timer < 6){
+	 if(led_t.gTimer_select_fun < 6){
    	    Fan_Led_Flicker();
 	 }
      else{
-        if(*(ptmsg+1) == confirm_disable){
+        if(confirm_key == confirm_disable){
 
         FAN_LED_OFF();
         }
@@ -126,9 +76,70 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
    break;
 
+ }
+
+
+ 
+/*************************************************************************
+       *
+       *Function Name: static void Fan_Flicker(void)
+       *Function : flicker of fan led
+       *Input Ref: NO
+       *Return Ref:NO
+       *
+*************************************************************************/
+void Tape_Led_Filcker(void)
+   {
+      
+       if(led_t.gTimer_flicker < 40){ //400ms
+   
+         TAPE_LED_OFF();
+   
+       }
+       else if(led_t.gTimer_flicker >39 && led_t.gTimer_flicker <81){
+   
+           
+         TAPE_LED_ON();
+   
+   
+       }
+       else{
+         led_t.gTimer_flicker=0;
+         
+   
+       }
+   
+   }
+   
+   
+   void Fan_Led_Flicker(void)
+   {
+       if(led_t.gTimer_flicker < 40){ //500ms
+       
+            FAN_LED_ON()  ;
+       
+          }
+          else if(led_t.gTimer_flicker >39 && led_t.gTimer_flicker <81){
+       
+             FAN_LED_OFF();
+       
+       
+          }
+          else{
+            led_t.gTimer_flicker=0;
+       
+          }
+   
+   
+   
+   }
+
+
+ #if 0
+
    case STERILIZATION_LED:
       //FAN 
-      if(*ptmsg== fan_enable){
+      if(ctl_t.confirm_key_select_item_fan == fan_enable){
 		TAPE_LED_ON();//TAPE_LED_ON();
 		RELAY_KILL_SetHigh()	;
 		}
@@ -139,7 +150,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 		}
 
        //TAPE
-		if(*(ptmsg+1) == tape_enable){
+		if(ctl_t.confirm_key_select_item_tape == tape_enable){
 		FAN_LED_ON();
 		RELAY_FAN_SetHigh()	;
 
@@ -149,7 +160,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 		   RELAY_FAN_SetLow()	;
 		}
         //KEEP HEAT
-		if(*(ptmsg+3) == keep_heat_enable){
+		if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
 		  KEEP_HEAT_LED_ON();
           RELAY_KEEP_TEMP_SetHigh()	;
 	  	}
@@ -161,11 +172,11 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
 
      //STERILIZATION
-      if(gtimer_t.gTimer_select_fun_key_timer < 6){
+      if(ctl_t.gTimer_select_fun < 6){
    	     Sterilization_Led_Filcker();
        }
        else{
-           if(*(ptmsg+2) == confirm_disable){
+           if(ctl_t.confirm_key_select_item_sterilization == confirm_disable){
 
             KILL_LED_OFF();
             }
@@ -177,7 +188,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
    case KEEP_HEAT_LED:
         //FAN
-       if(*ptmsg == fan_enable){
+       if(ctl_t.confirm_key_select_item_fan == fan_enable){
 		TAPE_LED_ON();
 		RELAY_KILL_SetHigh();
 		}
@@ -188,7 +199,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 		}
 
         //TAPE
-		if(*(ptmsg+1)== tape_enable){
+		if(ctl_t.confirm_key_select_item_tape == tape_enable){
     		FAN_LED_ON();
     		
     		RELAY_FAN_SetHigh();
@@ -202,7 +213,7 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
 		}
         //STERILIZATION 
-		if(*(ptmsg+2)== sterilization_enable ){
+		if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
 		    KILL_LED_ON();
             RELAY_TAPE_SetHigh()	;
             
@@ -215,15 +226,15 @@ void Led_Display_Content_Fun(uint8_t selitem, uint8_t  *ptmsg )
 
 	
       //KEEP HEAT Display of LED 
-       if(gtimer_t.gTimer_select_fun_key_timer < 6){
+       if(ctl_t.gTimer_select_fun < 6){
 	   	   Keep_Heat_Led_Filcker();
-		 
+		   ctl_t.keep_heat_run_flag= 1;
 	       led_t.gTimer_keey_heat_flicker=0;
-		   
+		   ctl_t.gTimer_keep_heat_fun=0;
 		
        	}
         else{
-           if(*(ptmsg+3) == confirm_disable){
+           if(ctl_t.confirm_key_select_item_keep_heat == confirm_disable){
               KEEP_HEAT_LED_OFF();
             }
             else{

@@ -49,6 +49,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        if(tm1 > 9){
            tm1 =0;
            gtimer_t.gTimer_led_blink++;
+           led_t.gTimer_flicker++;
+           
 
 
        }
@@ -63,6 +65,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
          gtimer_t.gTimer_select_fun_key_timer++;
          gtimer_t.gTimer_init_gpio++;
          gtimer_t.gTimer_confirm_short_key++;
+         led_t.gTimer_select_fun ++;
 
 
        }
